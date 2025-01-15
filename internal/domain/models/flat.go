@@ -3,8 +3,10 @@ package models
 import "github.com/google/uuid"
 
 type Flat struct {
-	ID              uuid.UUID
-	ApartmentNumber int
-	Price           int
-	CountRooms      int
+	ID               uuid.UUID
+	HouseId          uuid.UUID
+	Price            int
+	CountRooms       int
+	ApartmentNumber  int
+	ModerationStatus int
 }

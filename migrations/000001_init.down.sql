@@ -1,0 +1,7 @@
+DROP TABLE IF EXISTS users;
+
+DROP TABLE IF EXISTS house;
+
+DROP TABLE IF EXISTS flat;
+
+DROP TABLE IF EXISTS flat_in_house;

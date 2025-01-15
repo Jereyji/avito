@@ -6,5 +6,5 @@ type User struct {
 	ID          uuid.UUID
 	Username    string
 	Password    string
-	AccessLevel bool // ?
+	AccessLevel int
 }
