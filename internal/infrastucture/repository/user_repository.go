@@ -3,20 +3,20 @@ package repository
 import (
 	"context"
 	"errors"
-	"github.com/Jereyji/avito/internal/domain/models"
+	"github.com/Jereyji/avito/internal/domain/entities"
 	"github.com/Jereyji/avito/internal/infrastucture/repository/queries"
 	"github.com/jackc/pgx/v5"
 )
 
-func (r *EstateRepository) FetchUser(ctx context.Context, username string) (*models.User, error) {
+func (r *EstateRepository) FetchUser(ctx context.Context, username string) (*entities.User, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	var user models.User
+	var user entities.User
 	err := r.db.QueryRow(ctx, queries.FetchUserByUsernameQuery, username).Scan(
 		&user.ID,
 		&user.Username,
-		&user.Password,
+		&user.HashedPassword,
 		&user.AccessLevel,
 	)
 	if err != nil {
@@ -30,31 +30,31 @@ func (r *EstateRepository) FetchUser(ctx context.Context, username string) (*mod
 	return &user, nil
 }
 
-func (r *EstateRepository) CreateUser(ctx context.Context, user *models.User) (*models.User, error) {
+func (r *EstateRepository) CreateUser(ctx context.Context, user *entities.User) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	_, err := r.db.Exec(ctx, queries.CreateUserQuery,
 		user.ID,
 		user.Username,
-		user.Password,
+		user.HashedPassword,
 		user.AccessLevel,
 	)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return user, nil
+	return nil
 }
 
-func (r *EstateRepository) UpdateUser(ctx context.Context, user *models.User) (*models.User, error) {
+func (r *EstateRepository) UpdateUser(ctx context.Context, user *entities.User) (*entities.User, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
 	_, err := r.db.Exec(ctx, queries.UpdateUserQuery,
 		user.ID,
 		user.Username,
-		user.Password,
+		user.HashedPassword,
 		user.AccessLevel,
 	)
 	if err != nil {

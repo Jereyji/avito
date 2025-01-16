@@ -3,7 +3,7 @@ info:
   title: Тестовое задание для отбора на Backend Bootcamp
   version: 1.0.0
 paths:
-  /dummyLogin:
+  /auth/dummyLogin:
     get:
       description: >-
         Упрощенный процесс получения токена для дальнейшего прохождения авторизации
@@ -27,7 +27,7 @@ paths:
                     $ref: '#/components/schemas/Token'
         '500':
           $ref: '#/components/responses/5xx'
-  /login:
+  /auth/login:
     post:
       description: >-
         Дополнительное задание.
@@ -61,7 +61,7 @@ paths:
           description: Пользователь не найден
         '500':
           $ref: '#/components/responses/5xx'
-  /register:
+  /auth/register:
     post:
       description: >-
         Дополнительное задание.

@@ -2,15 +2,15 @@ package repository
 
 import (
 	"context"
-	"github.com/Jereyji/avito/internal/domain/models"
+	"github.com/Jereyji/avito/internal/domain/entities"
 	"github.com/Jereyji/avito/internal/infrastucture/repository/queries"
 )
 
-func (r *EstateRepository) FetchFlat(ctx context.Context, flatId string) (*models.Flat, error) {
+func (r *EstateRepository) FetchFlat(ctx context.Context, flatId string) (*entities.Flat, error) {
 	r.mu.RLock()
 	defer r.mu.RUnlock()
 
-	var flat models.Flat
+	var flat entities.Flat
 	err := r.db.QueryRow(ctx, queries.FetchFlatQuery, flatId).Scan(
 		flat.ID,
 		flat.HouseId,
@@ -26,7 +26,7 @@ func (r *EstateRepository) FetchFlat(ctx context.Context, flatId string) (*model
 	return &flat, nil
 }
 
-func (r *EstateRepository) CreateFlat(ctx context.Context, flat *models.Flat) (*models.Flat, error) {
+func (r *EstateRepository) CreateFlat(ctx context.Context, flat *entities.Flat) error {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 
@@ -39,13 +39,13 @@ func (r *EstateRepository) CreateFlat(ctx context.Context, flat *models.Flat) (*
 		flat.ModerationStatus,
 	)
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	return flat, nil
+	return nil
 }
 
-func (r *EstateRepository) UpdateFlat(ctx context.Context, flat *models.Flat) (*models.Flat, error) {
+func (r *EstateRepository) UpdateFlat(ctx context.Context, flat *entities.Flat) (*entities.Flat, error) {
 	r.mu.Lock()
 	defer r.mu.Unlock()
 

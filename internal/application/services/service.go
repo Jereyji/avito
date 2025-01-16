@@ -1,8 +1,9 @@
 package services
 
 import (
+	"github.com/Jereyji/avito/internal/domain/entities"
 	"github.com/Jereyji/avito/internal/domain/interface_repository"
-	"github.com/Jereyji/avito/internal/domain/models"
+	"golang.org/x/net/context"
 )
 
 type EstateService struct {
@@ -15,29 +16,40 @@ func NewEstateService(rep interface_repository.RepositoryInterface) *EstateServi
 	}
 }
 
-func (s EstateService) Register(user *models.User) (*models.User, error) {
-	// TODO: add hashing user's password
+func (s EstateService) Register(ctx context.Context, username string, password string, accessLevel int) error {
+	user, err := entities.NewUser(username, password, accessLevel)
+	if err != nil {
+		return err
+	}
 
-	return s.repository.CreateUser(user)
+	err = s.repository.CreateUser(ctx, user)
+	if err != nil {
+		return err // ADD: error handling?
+	}
+
+	return nil
 }
 
-func (s EstateService) Login(username, password string) (*models.Tokens, error) {
-	user, err := s.repository.User(username)
+func (s EstateService) Login(ctx context.Context, username, password string) (*entities.Tokens, error) {
+	user, err := s.repository.FetchUser(ctx, username)
 	if err != nil {
 		return nil, err
 	}
 
-	// TODO: add compare password hashes
-	//err := compareHashPassword(password, user.Password)
+	err = user.VerifyPassword(password)
+	if err != nil {
+		return nil, err
+	}
 
 	// TODO: add generate tokens with user.AccessLevel
 
-	return _, nil
+	return nil, nil
 }
 
-func (s EstateService) DummyLogin(username string, password string) (*models.User, error) {
+func (s EstateService) DummyLogin(ctx context.Context, username string, password string) (*entities.User, error) {
+	return nil, nil
 }
 
-func (s EstateService) GetFlatsByHouseId(houseId string) ([]models.Flat, error) {
-
+func (s EstateService) GetFlatsByHouseId(houseId string) ([]entities.Flat, error) {
+	return nil, nil
 }

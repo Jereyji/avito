@@ -5,7 +5,7 @@ DOCKER_COMPOSE_PATH=$(DEPLOYMENTS_PATH)/docker-compose.yaml
 
 .PHONY: env
 env:
-	./scripts/create_env.sh
+	bash scripts/create_env.sh
 
 .PHONY: build-service
 build-service:
